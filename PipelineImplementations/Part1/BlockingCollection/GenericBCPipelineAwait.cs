@@ -83,7 +83,7 @@ namespace PipelineImplementations.Part1.BlockingCollection
                     }
                     if (isLastStep)
                     {
-                        input.TaskCompletionSource.SetResult(output is TPipeOut res ? res : default(TPipeOut));
+                        input.TaskCompletionSource.SetResult((TPipeOut)(object)output);
                     }
                     else
                     {

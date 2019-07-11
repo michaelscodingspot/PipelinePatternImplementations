@@ -84,7 +84,7 @@ public class CastingPipelineWithAwait<TOutput> : IAwaitablePipeline<TOutput>
             bool isLastStep = bufferIndexLocal == _pipelineSteps.Count - 1;
             if (isLastStep)
             {
-                input.TaskCompletionSource.SetResult(output is TOutput output1 ? output1 : default(TOutput));
+                input.TaskCompletionSource.SetResult((TOutput)(object)output);
             }
             else
             {

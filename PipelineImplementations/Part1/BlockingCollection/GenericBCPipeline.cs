@@ -66,7 +66,7 @@ namespace PipelineImplementations.Part1.BlockingCollection
                     {
                     // This is dangerous as the invocation is added to the last step
                     // Alternatively, you can utilize BeginInvoke like here: https://stackoverflow.com/a/16336361/1229063
-                    Finished?.Invoke(output is TPipeOut v ? v : default(TPipeOut));
+                    Finished?.Invoke((TPipeOut)(object)output);
                     }
                     else
                     {

@@ -18,7 +18,7 @@ namespace PipelineImplementations.Part1.BlockingCollection
 
 public void AddStep<TStepIn, TStepOut>(Func<TStepIn, TStepOut> stepFunc)
 {
-    _pipelineSteps.Add(objInput => stepFunc.Invoke(objInput is TStepIn input ? input : default(TStepIn)));
+    _pipelineSteps.Add(objInput => stepFunc.Invoke((TStepIn)(object)objInput));
 }
 
         public void Execute(object input)
