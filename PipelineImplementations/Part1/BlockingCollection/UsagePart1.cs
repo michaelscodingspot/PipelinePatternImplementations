@@ -15,8 +15,8 @@ namespace PipelineImplementations.Part1.BlockingCollection
             //var pipeline = InnerCastingPipeline();
             //var pipeline = GenericBCPipeline();
             //var pipeline = CastingPipelineWithParallelism();
-            //var pipeline = CastingPipelineWithAwait();
-            var pipeline = CreateGenericBCPipelineAwait();
+            var pipeline = CastingPipelineWithAwait();
+            //var pipeline = CreateGenericBCPipelineAwait();
 
             var tsk = System.Threading.Tasks.Task.Run(async () =>
             {
