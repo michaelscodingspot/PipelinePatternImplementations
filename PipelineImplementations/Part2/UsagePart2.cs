@@ -15,18 +15,18 @@ namespace PipelineImplementations.Part2
         {
             Console.WriteLine(Utils.GetThreadPoolThreadsInUse());
             //UseSimple();
-            UseSimpleAsync();
+            //UseSimpleAsync();
             //UseTCS();
-            //UseBuilder();
+            UseBuilder();
         }
 
         private static void UseBuilder()
         {
-            var pipeline = new TPLPipelineWithAwaitAttempt2<string, bool>();
-            pipeline.AddStep<string, string>(sentence => FindMostCommon(sentence));
-            pipeline.AddStep<string, int>(word => word.Length);
-            pipeline.AddStep<int, bool>(length => length % 2 == 1);
-            pipeline.CreatePipeline();
+var pipeline = new TPLPipelineWithAwaitAttempt2<string, bool>()
+    .AddStep<string, string>(sentence => FindMostCommon(sentence))
+    .AddStep<string, int>(word => word.Length)
+    .AddStep<int, bool>(length => length % 2 == 1)
+    .CreatePipeline();
 
             System.Threading.Tasks.Task.Run(async () =>
             {

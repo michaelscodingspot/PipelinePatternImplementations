@@ -9,7 +9,7 @@ namespace PipelineImplementations.Part2.TPLDataflow
     public class TPLPipelineWithAwaitAttempt2<TIn, TOut>
     {
         private List<IDataflowBlock> _transformBlocks = new List<IDataflowBlock>();
-        public void AddStep<TLocalIn, TLocalOut>(Func<TLocalIn, TLocalOut> stepFunc)
+        public TPLPipelineWithAwaitAttempt2<TIn, TOut> AddStep<TLocalIn, TLocalOut>(Func<TLocalIn, TLocalOut> stepFunc)
         {
             var step = new TransformBlock<TC<TLocalIn, TOut>, TC<TLocalOut, TOut>>((tc) =>
                 {
@@ -34,15 +34,17 @@ namespace PipelineImplementations.Part2.TPLDataflow
                     tc => tc.TaskCompletionSource.Task.IsFaulted);
             }
             _transformBlocks.Add(step);
+            return this;
         }
 
-        public void CreatePipeline()
+        public TPLPipelineWithAwaitAttempt2<TIn, TOut> CreatePipeline()
         {
             var setResultStep =
                 new ActionBlock<TC<TOut, TOut>>((tc) => tc.TaskCompletionSource.SetResult(tc.Input));
             var lastStep = _transformBlocks.Last();
             var setResultBlock = (lastStep as ISourceBlock<TC<TOut, TOut>>);
             setResultBlock.LinkTo(setResultStep);
+            return this;
         }
 
         public Task<TOut> Execute(TIn input)
