@@ -6,18 +6,22 @@ using System.Threading.Tasks;
 using PipelineImplementations.Part1;
 using PipelineImplementations.Part1.BlockingCollection;
 using PipelineImplementations.Part2;
+using PipelineImplementations.PartN;
 
 namespace PipelineImplementations
 {
-    class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             //string input = "The pipeline pattern is the best pattern";
             //var pipeline = new MyPipeline();
             //Console.Write(pipeline.Execute(input)); // Returns 'True' because 'pattern' is the most common, with 7 characters and it's indeed an odd number
             //UsagePart1.Use();
-            UsagePart2.Use();
+
+            await UsagePartN.Use2();
+
+            Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
     }
