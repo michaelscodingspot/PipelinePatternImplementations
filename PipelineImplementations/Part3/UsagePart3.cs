@@ -21,7 +21,7 @@ namespace PipelineImplementations.Part3
         {
             var pipeline = new DisruptorSimpleAwaitable<bool>();
             pipeline.AddStep<string, string>(FindMostCommon);
-            pipeline.AddStep<string, int>((s) => /*CountChars*/ throw new Exception("asdf"));
+            pipeline.AddStep<string, int>(CountChars);
             pipeline.AddStep<int, bool>(IsOdd);
             pipeline.CreatePipeline();
 
@@ -44,17 +44,7 @@ namespace PipelineImplementations.Part3
             pipeline.CreatePipeline();
             pipeline.Execute("The pipeline pattern is the best pattern");
         }
-        private static void DisruptorExample()
-        {
-            var pipeline = new DisruptorExample();
-            pipeline.CreatePipeline();
-            for (int i = 0; i < 20; i++)
-            {
-                pipeline.Execute("Hello " + i.ToString());
-            }
-        }
-
-
+        
         private static void Simple()
         {
             var pipeline = new TPLDataflowSteppedSimple<string, bool>();
@@ -65,24 +55,6 @@ namespace PipelineImplementations.Part3
 
             pipeline.Execute("The pipeline patter is the best patter");
 
-
-        }
-
-        private static void SimpleAsync()
-        {
-            var pipeline = new TPLDataflowSteppedAsyncFinal<string, bool>();
-
-            Func<string, Task<string>> findMostCommonAsync = async (str) => await FindMostCommonAsync(str);
-            pipeline.AddStepAsync<string, string>(async input => FindMostCommon(input));
-
-            //pipeline.AddStepAsync<string,string>(async (str) => await FindMostCommonAsync(str));
-            pipeline.AddStep<string, int>(input => CountChars(input));
-            pipeline.AddStepAsync<int, bool>(async input => IsOdd(input));
-
-
-            pipeline.CreatePipeline(res => Console.WriteLine(res));
-
-            pipeline.Execute("The pipeline patter is the best patter");
 
         }
 
