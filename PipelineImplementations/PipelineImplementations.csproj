@@ -74,6 +74,14 @@
     <Compile Include="Part2\TPLDataflow\TPLPipelineWithAwaitAttempt2.cs" />
     <Compile Include="Part2\TPLDataflow\TPLPipelineWithAwaitFinal.cs" />
     <Compile Include="Part2\UsagePart2.cs" />
+    <Compile Include="Part3\Disruptor\DisruptorSimpleAwaitable.cs" />
+    <Compile Include="Part3\Disruptor\DisruptorSimple.cs" />
+    <Compile Include="Part3\Disruptor\DisruptorExample.cs" />
+    <Compile Include="Part3\TPLDataflowWithAsync\TPLDataflowSteppedAsync.cs" />
+    <Compile Include="Part3\TPLDataflowWithAsync\TPLDataflowSteppedAsyncFinal2.cs" />
+    <Compile Include="Part3\TPLDataflowWithAsync\TPLDataflowSteppedAsyncFinal.cs" />
+    <Compile Include="Part3\TPLDataflowWithAsync\TPLDataflowSteppedSimple.cs" />
+    <Compile Include="Part3\UsagePart3.cs" />
     <Compile Include="PartN\Impl\DisruptorEvent.cs" />
     <Compile Include="PartN\Impl\DisruptorPipeline.cs" />
     <Compile Include="PartN\Impl\DisruptorPipelineBuilder.cs" />

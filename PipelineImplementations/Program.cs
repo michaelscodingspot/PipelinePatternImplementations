@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using PipelineImplementations.Part1;
 using PipelineImplementations.Part1.BlockingCollection;
 using PipelineImplementations.Part2;
+using PipelineImplementations.Part3;
 using PipelineImplementations.PartN;
 
 namespace PipelineImplementations
@@ -19,7 +20,8 @@ namespace PipelineImplementations
             //Console.Write(pipeline.Execute(input)); // Returns 'True' because 'pattern' is the most common, with 7 characters and it's indeed an odd number
             //UsagePart1.Use();
 
-            await UsagePartN.Use2();
+            //await UsagePartN.Use2();
+            UsagePart3.Use();
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
