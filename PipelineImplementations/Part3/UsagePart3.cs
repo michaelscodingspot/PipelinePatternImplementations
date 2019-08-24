@@ -19,29 +19,28 @@ namespace PipelineImplementations.Part3
 
         private static async Task DisruptorAwaitable()
         {
-            var pipeline = new DisruptorSimpleAwaitable<bool>();
-            pipeline.AddStep<string, string>(FindMostCommon);
-            pipeline.AddStep<string, int>(CountChars);
-            pipeline.AddStep<int, bool>(IsOdd);
-            pipeline.CreatePipeline();
+            var pipeline = new DisruptorSimpleAwaitable<bool>()
+                .AddStep<string, string>(FindMostCommon)
+                .AddStep<string, int>(CountChars)
+                .AddStep<int, bool>(IsOdd)
+                .CreatePipeline();
 
             Console.WriteLine(await pipeline.Execute("The pipeline patter is the best pattern"));
         }
 
         private static void DisruptorSimple()
         {
-            var pipeline = new DisruptorSimple();
-            pipeline.AddStep<string, string>(FindMostCommon);
-            pipeline.AddStep<string, int>(CountChars);
-            pipeline.AddStep<int, bool>(IsOdd);
-
-            // Last step is kind of a result callback. We'll solve it better in a minute
-            pipeline.AddStep<bool, bool>((res) =>
-            {
-                Console.WriteLine(res);
-                return res;
-            });
-            pipeline.CreatePipeline();
+            var pipeline = new DisruptorSimple()
+                .AddStep<string, string>(FindMostCommon)
+                .AddStep<string, int>(CountChars)
+                .AddStep<int, bool>(IsOdd)
+                // This last step is kind of a result callback. We'll solve it better in a minute
+                .AddStep<bool, bool>((res) =>
+                {
+                    Console.WriteLine(res);
+                    return res;
+                })
+                .CreatePipeline();
             pipeline.Execute("The pipeline pattern is the best pattern");
         }
         

@@ -13,7 +13,6 @@ namespace PipelineImplementations.Part3.Disruptor
     public class EventExample
     {
         public object Value { get; set; }
-        public object TaskCompletionSource { get; set; }
     }
 
     public class MyHandler : IEventHandler<EventExample>, IWorkHandler<EventExample>

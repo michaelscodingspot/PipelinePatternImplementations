@@ -10,14 +10,18 @@ using Disruptor.Dsl;
 
 namespace PipelineImplementations.Part3.Disruptor
 {
-    
 
-public class DisruptorSimpleAwaitable<TOut>
+    public interface IPipeline<TOut>
+    {
+        Task<TOut> Execute(string data);
+    }
+
+public class DisruptorSimpleAwaitable<TOut> : IPipeline<TOut>
 {
     public class StepPayload<TOut>
     {
         public object Value { get; set; }
-        public TaskCompletionSource<TOut> TaskCompletionSource { get; set; } = new TaskCompletionSource<TOut>();
+        public TaskCompletionSource<TOut> TaskCompletionSource { get; set; }
     }
 
     public class DelegateHandler<TOut> : IWorkHandler<StepPayload<TOut>>
@@ -56,12 +60,13 @@ public class DisruptorSimpleAwaitable<TOut>
 
     private Disruptor<StepPayload<TOut>> _disruptor;
     private List<DelegateHandler<TOut>> _steps = new List<DelegateHandler<TOut>>();
-    public void AddStep<TLocalIn, TLocalOut>(Func<TLocalIn, TLocalOut> stepFunc)
+    public DisruptorSimpleAwaitable<TOut> AddStep<TLocalIn, TLocalOut>(Func<TLocalIn, TLocalOut> stepFunc)
     {
         _steps.Add(new DelegateHandler<TOut>((obj) => stepFunc((TLocalIn)obj)));
+        return this;
     }
 
-    public void CreatePipeline()
+    public IPipeline<TOut> CreatePipeline()
     {
         _disruptor = new Disruptor<StepPayload<TOut>>(() => new StepPayload<TOut>(), 1024, TaskScheduler.Default/*, ProducerType.Multi, new BlockingSpinWaitWaitStrategy()*/);
         var handlerGroup = _disruptor.HandleEventsWithWorkerPool(_steps.First());
@@ -76,6 +81,7 @@ public class DisruptorSimpleAwaitable<TOut>
         handlerGroup.HandleEventsWithWorkerPool(setResultHandlerToArray);
         
         _disruptor.Start();
+        return this;
     }
 
 
@@ -84,8 +90,11 @@ public class DisruptorSimpleAwaitable<TOut>
         var sequence = _disruptor.RingBuffer.Next();
         var disruptorEvent = _disruptor[sequence];
         disruptorEvent.Value = data;
+        var tcs = new TaskCompletionSource<TOut>();
+        disruptorEvent.TaskCompletionSource = tcs;
+
         _disruptor.RingBuffer.Publish(sequence);
-        return disruptorEvent.TaskCompletionSource.Task;
+        return tcs.Task;
 
     }
 }

@@ -10,8 +10,11 @@ using Disruptor.Dsl;
 
 namespace PipelineImplementations.Part3.Disruptor
 {
-    
-public class DisruptorSimple
+    public interface ISimplePipeline
+    {
+        void Execute(object data);
+    }
+public class DisruptorSimple : ISimplePipeline
 {
     private class StepPayload
     {
@@ -36,12 +39,13 @@ public class DisruptorSimple
 
     private Disruptor<StepPayload> _disruptor;
     private List<DelegateHandler> _steps = new List<DelegateHandler>();
-    public void AddStep<TLocalIn, TLocalOut>(Func<TLocalIn, TLocalOut> stepFunc)
+    public DisruptorSimple AddStep<TLocalIn, TLocalOut>(Func<TLocalIn, TLocalOut> stepFunc)
     {
         _steps.Add(new DelegateHandler((obj) => stepFunc((TLocalIn)obj)));
+        return this;
     }
 
-    public void CreatePipeline()
+    public ISimplePipeline CreatePipeline()
     {
         _disruptor = new Disruptor<StepPayload>(() => new StepPayload(), 1024, TaskScheduler.Default/*, ProducerType.Multi, new BlockingSpinWaitWaitStrategy()*/);
         var handlerGroup = _disruptor.HandleEventsWithWorkerPool(_steps.First());
@@ -53,10 +57,11 @@ public class DisruptorSimple
         }
         
         _disruptor.Start();
+        return this;
     }
 
 
-    public void Execute(string data)
+    public void Execute(object data)
     {
         var sequence = _disruptor.RingBuffer.Next();
         var disruptorEvent = _disruptor[sequence];
